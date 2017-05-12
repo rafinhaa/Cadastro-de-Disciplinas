@@ -14,19 +14,18 @@ import com.rafinhaa.model.Periodo;
 public class DisciplinaTableModel extends AbstractTableModel{
 	
 	//constantes p/identificar colunas
-	private final int ID=0;
-	private final int NOME=1;
-	private final int CURSO=2;
-	private final int PERIODO=3;
-	private final int CARGA_HORARIA=4;
-	private final int NUMERO_DE_VAGAS=5;
+	private final int NOME=0;
+	private final int CURSO=1;
+	private final int PERIODO=2;
+	private final int CARGA_HORARIA=3;
+	private final int NUMERO_DE_VAGAS=4;
 	
-	private final String colunas[] = {"iD", "Nome", "Curso","Periodo","C.Horaria","N.Vagas"};
-	private final List<Disciplina> dados;//usamos como dados uma lista genérica
+	private final String colunas[] = {"Nome", "Curso","Periodo","C.Horaria","N.Vagas"};
+	private final List<Disciplina> linhas;//usamos como linhas uma lista genérica
 	
 	public DisciplinaTableModel(List<Disciplina> dados) {
 		//seto os dados no construtor
-		this.dados=dados;
+		this.linhas=dados;
 	}
 	
 	@Override
@@ -38,15 +37,13 @@ public class DisciplinaTableModel extends AbstractTableModel{
 	@Override
 	public int getRowCount() {
 		//retorna o total de linhas na tabela
-		return dados.size();
+		return linhas.size();
 	}
 
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
 		//retorna o tipo de dado, para cada coluna
 		switch (columnIndex) {
-		case ID:
-			return int.class;
 		case NOME:
 			return String.class;
 		case CURSO:
@@ -72,12 +69,10 @@ public class DisciplinaTableModel extends AbstractTableModel{
 		//retorna o valor conforme a coluna e linha
 		
 				//pega o dados corrente da linha
-		Disciplina disciplina=dados.get(rowIndex);
+		Disciplina disciplina=linhas.get(rowIndex);
 		
 		//retorna o valor da coluna
 		switch (columnIndex) {
-		case ID:
-			return disciplina.getId();
 		case NOME:
 			return disciplina.getNomeDaDiciplina();
 		case CURSO:
@@ -102,7 +97,7 @@ public class DisciplinaTableModel extends AbstractTableModel{
 	 * @return
 	 */
 	public Disciplina getValue(int rowIndex){
-		return dados.get(rowIndex);
+		return linhas.get(rowIndex);
 	}
 	
 	/**
@@ -111,7 +106,7 @@ public class DisciplinaTableModel extends AbstractTableModel{
 	 * @return
 	 */
 	public int indexOf(Disciplina disciplina) {
-		return dados.indexOf(disciplina);
+		return linhas.indexOf(disciplina);
 	}
 	
 	/**
@@ -119,7 +114,7 @@ public class DisciplinaTableModel extends AbstractTableModel{
 	 * @param disciplina
 	 */
 	public void onAdd(Disciplina disciplina) {
-		dados.add(disciplina);
+		linhas.add(disciplina);
 		fireTableRowsInserted(indexOf(disciplina), indexOf(disciplina));
 	}
 	
@@ -128,8 +123,28 @@ public class DisciplinaTableModel extends AbstractTableModel{
 	 * @param dadosIn
 	 */
 	public void onAddAll(List<Disciplina> dadosIn) {
-		dados.addAll(dadosIn);
+		linhas.addAll(dadosIn);
+		// Pega a quantidade de registros e subtrai 1 para
+	    // achar o último índice. A subtração é necessária
+	    // porque os índices começam em zero.
+	    //int ultimoIndice = getRowCount() - 1;
 		fireTableDataChanged();
+	}
+	
+	/**
+	 * Adiciona uma lista de disciplinas no final da lista, segundo modo testar
+	 * @param disciplinas
+	 */
+	public void addListaDeDisciplinas(List<Disciplina> disciplinas) {
+		// Pega o tamanho antigo da tabela, que servirá
+		// como índice para o primeiro dos novos registros
+		int indice = getRowCount();
+		
+		// Adiciona os registros.
+		linhas.addAll(disciplinas);
+		
+		// Notifica a mudança.
+		fireTableRowsInserted(indice, indice + disciplinas.size());
 	}
 	
 	/**
@@ -137,7 +152,7 @@ public class DisciplinaTableModel extends AbstractTableModel{
 	 * @param rowIndex
 	 */
 	public void onRemove(int rowIndex) {
-		dados.remove(rowIndex);
+		linhas.remove(rowIndex);
 		fireTableRowsDeleted(rowIndex, rowIndex);
 	}
 	
@@ -146,7 +161,7 @@ public class DisciplinaTableModel extends AbstractTableModel{
 	 * @param disciplina
 	 */
 	public void onRemove(Disciplina disciplina) {
-		dados.remove(disciplina);
+		linhas.remove(disciplina);
 		fireTableRowsDeleted(indexOf(disciplina), indexOf(disciplina));
 	}
 	
@@ -154,8 +169,8 @@ public class DisciplinaTableModel extends AbstractTableModel{
 	 * remove todos registros da lista
 	 */
 	public void onRemoveAll() {
-		dados.clear();
+		linhas.clear();
 		fireTableDataChanged();
 	}
-	
 }
+

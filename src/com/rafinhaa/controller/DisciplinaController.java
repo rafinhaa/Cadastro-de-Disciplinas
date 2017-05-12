@@ -2,8 +2,8 @@ package com.rafinhaa.controller;
 
 import java.util.List;
 
+import com.rafinhaa.dao.DisciplinaDAO;
 import com.rafinhaa.model.Disciplina;
-import com.rafinhaa.model.DisciplinaDAO;
 
 public class DisciplinaController {
 

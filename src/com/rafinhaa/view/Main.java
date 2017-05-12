@@ -17,6 +17,7 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import com.rafinhaa.builders.DisciplinaBuilder;
 import com.rafinhaa.controller.DisciplinaController;
 import com.rafinhaa.model.Disciplina;
 import com.rafinhaa.model.Periodo;
@@ -123,7 +124,6 @@ public class Main {
 		JButton btnNewButton = new JButton("Cadastrar");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				
 				evento("cadastrar");
 			}
 		});
@@ -142,7 +142,11 @@ public class Main {
 
 	private void cadastrar() {
 		dController = new DisciplinaController();
-		dController.inserirDisciplina(disciplinaBuilder());
+		dController.inserirDisciplina(new DisciplinaBuilder()
+				.comNome(txtNome.getText()).comCurso(txtCurso.getText())
+				.comPeriodo((Periodo) cmbPeriodo.getSelectedItem())
+				.comCargaHoraria(Float.parseFloat(txtCargaHoraria.getText()))
+				.comVagas(Integer.parseInt(txtVagas.getText())).builder());
 		limparCampos();
 	}
 
@@ -165,23 +169,15 @@ public class Main {
 	private void evento(String evento) {
 		if (validarCampos()) {
 			Object[] options = { "Sim", "Não" };
-			int optionDialog = JOptionPane.showOptionDialog(null, "Deseja inserir essa disciplina?", "Informação", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
-			if(optionDialog == 0){
+			int optionDialog = JOptionPane.showOptionDialog(null, "Deseja inserir essa disciplina?", "Informação",
+					JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+			if (optionDialog == 0) {
 				cadastrar();
 			}
 		} else {
 			JOptionPane.showMessageDialog(null, "Erro:\n Preencha todos os campos!", "Mensagem",
 					JOptionPane.ERROR_MESSAGE);
 		}
-	}
-
-	private Disciplina disciplinaBuilder() {
-		String nomeDaDiciplina = txtNome.getText();
-		String cursoQueElaPertence = txtCurso.getText();
-		Periodo periodo = (Periodo) cmbPeriodo.getSelectedItem();
-		Float cargaHoraria = Float.parseFloat(txtCargaHoraria.getText());
-		int numeroDeVagas = Integer.parseInt(txtVagas.getText());
-		return new Disciplina(nomeDaDiciplina, cargaHoraria, cursoQueElaPertence, numeroDeVagas, periodo);
 	}
 
 }

@@ -20,7 +20,9 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.table.TableModel;
 
+import com.rafinhaa.builders.DisciplinaBuilder;
 import com.rafinhaa.controller.DisciplinaController;
 import com.rafinhaa.model.Disciplina;
 import com.rafinhaa.model.Periodo;
@@ -153,12 +155,8 @@ public class ConsultarDisciplina {
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				lblId.setText(table.getValueAt(table.getSelectedRow(), 0).toString());
-				txtNome.setText(table.getValueAt(table.getSelectedRow(), 1).toString());
-				txtCurso.setText(table.getValueAt(table.getSelectedRow(), 2).toString());
-				cmbPeriodo.setSelectedIndex(Periodo.obtemId(table.getValueAt(table.getSelectedRow(), 3).toString()));
-				txtCargaHoraria.setText(table.getValueAt(table.getSelectedRow(), 4).toString());
-				txtVagas.setText(table.getValueAt(table.getSelectedRow(), 5).toString());
+				Disciplina disciplina = tableModel.getValue(table.getSelectedRow());
+				disciplinaBuilderReverse(disciplina);
 			}
 		});
 		preencherTabela();
@@ -190,6 +188,16 @@ public class ConsultarDisciplina {
 		dController.atualizar(disciplinaBuilder());
 		limparCampos();
 		preencherTabela();
+	}
+
+	private Disciplina disciplinaBuilder() {
+		return new DisciplinaBuilder()
+				.comId(Integer.parseInt(lblId.getText()))
+				.comNome(txtNome.getText()).comCurso(txtCurso.getText())
+				.comPeriodo((Periodo) cmbPeriodo.getSelectedItem())
+				.comCargaHoraria(Float.parseFloat(txtCargaHoraria.getText()))
+				.comVagas(Integer.parseInt(txtVagas.getText()))
+				.builder();
 	}
 
 	private void deletar() {
@@ -228,7 +236,7 @@ public class ConsultarDisciplina {
 					JOptionPane.ERROR_MESSAGE);
 		}
 	}
-
+/*
 	private Disciplina disciplinaBuilder() {
 		dController = new DisciplinaController();
 		String nomeDaDiciplina = txtNome.getText();
@@ -241,6 +249,15 @@ public class ConsultarDisciplina {
 			return new Disciplina(iD, nomeDaDiciplina, cargaHoraria, cursoQueElaPertence, numeroDeVagas, periodo);
 		} else
 			return new Disciplina(nomeDaDiciplina, cargaHoraria, cursoQueElaPertence, numeroDeVagas, periodo);
+	}
+	*/
+	private void disciplinaBuilderReverse(Disciplina disciplina){
+		lblId.setText(disciplina.getId()+"");
+		txtNome.setText(disciplina.getNomeDaDiciplina());
+		txtCurso.setText(disciplina.getCursoQueElaPertence());
+		cmbPeriodo.setSelectedIndex(Periodo.obtemId(disciplina.getPeriodo()));
+		txtCargaHoraria.setText(disciplina.getCargaHoraria()+"");
+		txtVagas.setText(disciplina.getNumeroDeVagas()+"");
 	}
 
 }

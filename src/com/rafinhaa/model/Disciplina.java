@@ -9,14 +9,6 @@ public class Disciplina {
 	private int vagas;
 	private Periodo periodo;
 	
-	public Disciplina(String nomeDaDiciplina, float cargaHoraria, String cursoQueElaPertence, int numeroDeVagas, Periodo periodo) {
-		this.nome = nomeDaDiciplina;
-		this.cargaHoraria = cargaHoraria;
-		this.cursoQueElaPertence = cursoQueElaPertence;
-		this.vagas = numeroDeVagas;
-		this.periodo = periodo;
-	}
-
 	public Disciplina(int Id, String nomeDaDiciplina, float cargaHoraria, String cursoQueElaPertence, int numeroDeVagas, Periodo periodo) {
 		this.Id = Id;
 		this.nome = nomeDaDiciplina;
@@ -26,6 +18,9 @@ public class Disciplina {
 		this.periodo = periodo;
 	}
 	
+	public Disciplina() {
+	}
+
 	public String getNomeDaDiciplina() {
 		return nome;
 	}
